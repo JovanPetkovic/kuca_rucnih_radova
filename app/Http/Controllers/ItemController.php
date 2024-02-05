@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreItemRequest;
 use App\Http\Requests\UpdateItemRequest;
+use App\Models\Category;
 use App\Models\Item;
-use http\Env\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -20,15 +21,23 @@ class ItemController extends Controller
     {
         return view('items.index',[
             'items' => Item::with('user')->latest()->get(),
+            'categories' => Category::all()
         ]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function search(Request $request)
     {
-        //
+        $search = $request->input('search');
+        $items = Item::where('name','like',"%$search%")
+                        ->orWhere('description','like',"%$search%")
+                        ->get();
+        return view('items.index',[
+            'items' => $items,
+            'categories' => Category::all()
+        ]);
     }
 
     /**
@@ -56,7 +65,11 @@ class ItemController extends Controller
         $validated['images'] = $imageNames;
 
         //Saving Item into db
-        $request->user()->items()->create($validated);
+
+        $item = $request->user()->items()->create($validated);
+        $categories = array_map('intval', $validated['categories']);
+        $item->categories()->attach(Category::whereIn('id',$categories)->get());
+
         return redirect(route('items.index'));
 
 
@@ -77,7 +90,10 @@ class ItemController extends Controller
     {
         $this->authorize('update', $item);
 
-        return View('items.edit',['item' => $item]);
+        return View('items.edit',[
+            'item' => $item,
+            'categories' => Category::all()
+        ]);
     }
 
     /**
@@ -91,6 +107,10 @@ class ItemController extends Controller
 
         $item->update($validated);
 
+        $categories = array_map('intval', $validated['categories']);
+        $item->categories()->detach($item->categories);
+        $item->categories()->attach(Category::whereIn('id',$categories)->get());
+
         return redirect(route('items.index'));
 
     }
@@ -101,7 +121,7 @@ class ItemController extends Controller
     public function destroy(Item $item)
     {
         $this->authorize('delete',$item);
-
+        $item->categories()->detach($item->categories);
         $item->delete();
 
         return redirect(route('items.index'));

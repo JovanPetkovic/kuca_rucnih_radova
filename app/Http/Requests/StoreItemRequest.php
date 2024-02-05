@@ -26,7 +26,8 @@ class StoreItemRequest extends FormRequest
             'description' => 'required',
             'price' => 'required|numeric',
             'quantity' => 'required|numeric',
-            'images' => 'required'
+            'images' => 'required',
+            'categories' => 'array'
         ];
     }
 }

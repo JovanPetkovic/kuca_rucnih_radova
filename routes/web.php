@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ItemController;
@@ -32,5 +34,14 @@ Route::middleware('auth')->group(function () {
 Route::resource('items',ItemController::class)
     ->only(['index','store','edit','update','destroy'])
     ->middleware(['auth']);
+
+Route::get('/items/search',[ItemController::class, 'search'])->name('items.search');
+
+Route::resource('categories',CategoryController::class)
+    ->only(['index','store','edit','update','destroy'])
+    ->middleware(['auth']);
+
+Route::resource('orders',OrderController::class)
+    ->only(['index','store']);
 
 require __DIR__.'/auth.php';

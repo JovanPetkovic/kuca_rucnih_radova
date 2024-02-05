@@ -26,7 +26,8 @@ class UpdateItemRequest extends FormRequest
             'name' => 'required|max:255',
             'description' => 'required',
             'price' => 'required|numeric',
-            'quantity' => 'required|numeric'
+            'quantity' => 'required|numeric',
+            'categories' => 'array'
         ];
     }
 }

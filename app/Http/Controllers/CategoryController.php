@@ -35,7 +35,13 @@ class CategoryController extends Controller
         return redirect()->back();
     }
 
-    public function update(Category $category):RedirectResponse{
+    public function update(Request $request,Category $category):RedirectResponse{
+        $validated = $request->validate([
+            'name' => 'required|string'
+        ]);
+
+        $category->update($validated);
+
         return redirect()->back();
     }
 

@@ -1,5 +1,9 @@
 <x-app-layout>
     <div class="max-w-2xl mx-auto p-4 sm:p-6 lg:p-8">
+        <form action="{{ route('items.search') }}" method="GET">
+            <input type="text" name="search" placeholder="Search Products">
+            <button type="submit">Search</button>
+        </form>
         <form method="POST" action="{{ route('items.store') }}" enctype="multipart/form-data">
             @csrf
             <input
@@ -27,6 +31,14 @@
             />
             <label for="image">Select images to upload:</label>
             <input type="file" name="images[]" id="image" multiple/>
+            <div>
+                <label for="dropdown">Select an option:</label>
+                <select id="itemCategories" name="categories[]" multiple="multiple" required>
+                    @foreach($categories as $category)
+                        <option value="{{$category->id}}">{{$category->name}}</option>
+                    @endforeach
+                </select>
+            </div>
             <x-input-error :messages="$errors->get('message')" class="mt-2" />
             <x-primary-button class="mt-4">{{ __('Item') }}</x-primary-button>
         </form>
@@ -79,8 +91,13 @@
                             $imageNames = explode(';', $item->images);
                         }}
                         @endphp
+                        <div class="flex">
+                        @foreach($item->categories as $category)
+                           <p class="mr-2 rounded-md bg-amber-400 px-1 py-0.5">{{$category->name}}</p>
+                        @endforeach
+                        </div>
                         @foreach($imageNames as $imageName)
-                            <img class="border-gray-100 m-2 rounded-lg"src="{{ asset('images/' . $imageName) }}" alt="{{$imageName}}">
+                            <img class="border-gray-100 m-2 rounded-lg"src="{{$imageName }}" alt="{{$imageName}}">
                         @endforeach
                     </div>
                 </div>
