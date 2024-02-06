@@ -78,6 +78,13 @@
                                                 {{ __('Delete') }}
                                             </x-dropdown-link>
                                         </form>
+                                        <form method="POST" action="{{ route('cart.store', $item) }}">
+                                            @csrf
+                                            @method('post')
+                                            <x-dropdown-link :href="route('cart.store', $item)" onclick="event.preventDefault(); this.closest('form').submit();">
+                                                {{ __('Add to cart') }}
+                                            </x-dropdown-link>
+                                        </form>
                                     </x-slot>
                                 </x-dropdown>
                             @endif

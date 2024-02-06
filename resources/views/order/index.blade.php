@@ -1,5 +1,5 @@
 <div class="max-w-2xl mx-auto p-4 sm:p-6 lg:p-8">
-        <form method="POST" action="{{ route('order.store') }}">
+        <form method="POST" action="{{ route('orders.store') }}">
             @csrf
             <input
                 type="text"

@@ -3,6 +3,7 @@
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ShoppingCartController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ItemController;
 
@@ -34,6 +35,13 @@ Route::middleware('auth')->group(function () {
 Route::resource('items',ItemController::class)
     ->only(['index','store','edit','update','destroy'])
     ->middleware(['auth']);
+
+Route::resource('orders',OrderController::class)
+    ->only(['index','store']);
+
+Route::get('/cart',[ShoppingCartcontroller::class,'index'])->name('cart.index');
+Route::post('/cart/store/{item}',[ShoppingCartcontroller::class,'store'])->name('cart.store');
+Route::delete('/cart/remove/{item}',[ShoppingCartcontroller::class,'remove'])->name('cart.remove');
 
 Route::get('/items/search',[ItemController::class, 'search'])->name('items.search');
 
