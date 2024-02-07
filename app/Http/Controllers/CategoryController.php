@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Item;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -14,6 +15,23 @@ class CategoryController extends Controller
             'categories' => Category::all()
         ]);
     }
+
+    public function all():View{
+        return view('items.index',[
+            'categories' => Category::all(),
+            'items' => Item::all()
+        ]);
+    }
+
+    public function items(Category $category):View{
+        $items = $category->items;
+        return view('items.index',[
+            'categories' => Category::all(),
+            'items' => $items
+        ]);
+    }
+
+
 
     public function store(Request $request):RedirectResponse{
         $request->validate([

@@ -58,6 +58,6 @@
             @endforeach
         @endif
     </div>
-    @include('order.index')
+    @include('order.form')
 
 </x-app-layout>

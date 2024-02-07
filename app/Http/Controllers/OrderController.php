@@ -13,7 +13,9 @@ class OrderController extends Controller
 {
 
     public function index():View{
-        return View('order.index');
+        return View('order.index',[
+            'orders' => Order::all()
+        ]);
     }
 
     public function store(Request $request):RedirectResponse{
@@ -43,8 +45,9 @@ class OrderController extends Controller
         ]);
 
         $cartItems = session()->get('cart');
-        foreach($cartItems as $item) $item->orders()->attach($order);
 
+        foreach($cartItems as $item) $item->orders()->attach($order);
+        session()->put('cart',null);
         return redirect()->back();
 
     }

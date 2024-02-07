@@ -36,6 +36,8 @@ Route::resource('items',ItemController::class)
     ->only(['index','store','edit','update','destroy'])
     ->middleware(['auth']);
 
+Route::get('items/{item}',[ItemController::class,'show'])->name('items.show');
+
 Route::resource('orders',OrderController::class)
     ->only(['index','store']);
 
@@ -49,7 +51,13 @@ Route::resource('categories',CategoryController::class)
     ->only(['index','store','edit','update','destroy'])
     ->middleware(['auth']);
 
+Route::get('/category/{category}',[CategoryController::class,'items'])->name('category.items');
+Route::get('/category',[CategoryController::class,'all'])->name('category.all');
+
 Route::resource('orders',OrderController::class)
     ->only(['index','store']);
+
+Route::get('orders',[OrderController::class,'index'])->middleware('auth')->name('orders.index');
+Route::post('orders',[OrderController::class,'store'])->name('orders.store');
 
 require __DIR__.'/auth.php';
