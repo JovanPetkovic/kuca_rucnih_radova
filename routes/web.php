@@ -20,7 +20,7 @@ use App\Http\Controllers\ItemController;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('home');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -36,6 +36,8 @@ Route::resource('items',ItemController::class)
     ->only(['index','store','edit','update','destroy'])
     ->middleware(['auth']);
 
+Route::get('/items/add',[ItemController::class,'add'])->middleware(['auth'])->name('items.add');
+
 Route::get('items/{item}',[ItemController::class,'show'])->name('items.show');
 
 Route::resource('orders',OrderController::class)
@@ -45,7 +47,7 @@ Route::get('/cart',[ShoppingCartcontroller::class,'index'])->name('cart.index');
 Route::post('/cart/store/{item}',[ShoppingCartcontroller::class,'store'])->name('cart.store');
 Route::delete('/cart/remove/{item}',[ShoppingCartcontroller::class,'remove'])->name('cart.remove');
 
-Route::get('/items/search',[ItemController::class, 'search'])->name('items.search');
+Route::post('items/search',[ItemController::class, 'search'])->name('items.search');
 
 Route::resource('categories',CategoryController::class)
     ->only(['index','store','edit','update','destroy'])

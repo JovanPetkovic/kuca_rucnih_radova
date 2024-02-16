@@ -30,7 +30,7 @@ class ItemController extends Controller
      */
     public function search(Request $request)
     {
-        $search = $request->input('search');
+        $search = $request->input('searchTerm');
         $items = Item::where('name','like',"%$search%")
                         ->orWhere('description','like',"%$search%")
                         ->get();
@@ -81,6 +81,10 @@ class ItemController extends Controller
     public function show(Item $item)
     {
         return view('items.show',['item'=>$item]);
+    }
+
+    public function add(){
+        return view('items.add',['categories' => Category::all()]);
     }
 
     /**
